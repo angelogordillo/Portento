@@ -49,12 +49,21 @@
     }
 
     .ig-link {
-      color: #fff;
+      display: block;
+      width: min(760px, 100%);
       text-decoration: none;
-      border: 1px solid rgba(255, 255, 255, 0.28);
-      border-radius: 999px;
-      padding: 10px 14px;
-      font-weight: 600;
+      transition: transform 0.2s ease;
+    }
+
+    .ig-link:hover {
+      transform: translateY(-2px);
+    }
+
+    .ig-badge {
+      width: 100%;
+      height: auto;
+      display: block;
+      border-radius: 12px;
     }
   </style>
 </head>
@@ -76,8 +85,8 @@
       loading="lazy"
       allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture">
     </iframe>
-    <a class="ig-link" href="https://www.instagram.com/portentorecords/" target="_blank" rel="noopener noreferrer">
-      Instagram: @portentorecords
+    <a class="ig-link" href="https://www.instagram.com/portentorecords/" target="_blank" rel="noopener noreferrer" aria-label="Instagram Portento Records">
+      <img class="ig-badge" src="./instagram-logo.svg" alt="Instagram Portento Records" />
     </a>
   </main>
 </body>
