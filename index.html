@@ -34,9 +34,19 @@
 
     iframe {
       width: 100%;
+      aspect-ratio: 16 / 9;
       border: 0;
       border-radius: 14px;
       background: #000;
+    }
+
+    .ig-link {
+      color: #fff;
+      text-decoration: none;
+      border: 1px solid rgba(255, 255, 255, 0.28);
+      border-radius: 999px;
+      padding: 10px 14px;
+      font-weight: 600;
     }
   </style>
 </head>
@@ -44,15 +54,15 @@
   <main class="wrap">
     <img class="logo" src="./portento-logo.png" alt="Logo Portento" />
     <iframe
-      style="border-radius:12px"
-      src="https://open.spotify.com/embed/artist/0p0NNmXeyiUoxsalvITKgc?utm_source=generator"
-      width="100%"
-      height="352"
-      title="Portento Spotify"
+      src="https://www.youtube.com/embed/ktjeEKt8N1Q?rel=0"
+      title="Portento Video"
       loading="lazy"
-      allowfullscreen
-      allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture">
+      allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+      allowfullscreen>
     </iframe>
+    <a class="ig-link" href="https://www.instagram.com/portentorecords/" target="_blank" rel="noopener noreferrer">
+      Instagram: @portentorecords
+    </a>
   </main>
 </body>
 </html>
