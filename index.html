@@ -102,13 +102,24 @@
     }
 
     .incidental a {
-      display: inline-block;
-      color: #fff;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      min-width: 240px;
+      color: #05060d;
       text-decoration: none;
-      border: 1px solid rgba(255, 255, 255, 0.28);
+      border: 1px solid transparent;
       border-radius: 999px;
-      padding: 10px 14px;
-      font-weight: 600;
+      padding: 12px 18px;
+      font-weight: 700;
+      background: linear-gradient(135deg, #feda75, #fa7e1e 40%, #d62976);
+      box-shadow: 0 8px 24px rgba(214, 41, 118, 0.35);
+      transition: transform 0.2s ease, box-shadow 0.2s ease;
+    }
+
+    .incidental a:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 12px 28px rgba(214, 41, 118, 0.42);
     }
   </style>
 </head>
@@ -132,8 +143,8 @@
     </iframe>
     <section class="incidental" aria-label="Musica incidental">
       <h2>Musica incidental</h2>
-      <p>Escucha la musica incidental de esta obra.</p>
-      <a href="https://a.co/d/0cAcmmZw" target="_blank" rel="noopener noreferrer">Abrir obra</a>
+      <p>Escucha la musica incidental de esta obra y revisa los detalles completos.</p>
+      <a href="/poder/">Ver detalles de la obra</a>
     </section>
     <section class="social" aria-label="Instagram de Portento">
       <a class="ig-link" href="https://www.instagram.com/portentorecords/" target="_blank" rel="noopener noreferrer" aria-label="Instagram Portento Records">
