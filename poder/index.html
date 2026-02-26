@@ -54,7 +54,16 @@
       display: grid;
       grid-template-columns: 0.92fr 1.08fr;
       gap: 18px;
-      align-items: center;
+      align-items: start;
+    }
+
+    .cover-col {
+      display: grid;
+      gap: 12px;
+    }
+
+    .cover-link {
+      display: block;
     }
 
     .cover {
@@ -78,6 +87,19 @@
       margin-bottom: 10px;
     }
 
+    .cover-btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      text-decoration: none;
+      color: #0a0b0d;
+      border-radius: 999px;
+      padding: 11px 14px;
+      font-weight: 800;
+      background: linear-gradient(130deg, var(--gold), #efe07a 52%, var(--olive));
+      border: 1px solid transparent;
+    }
+
     h1 {
       font-size: clamp(34px, 6vw, 56px);
       line-height: 0.97;
@@ -95,7 +117,7 @@
       display: grid;
       grid-template-columns: 1fr 1fr;
       gap: 12px;
-      margin-bottom: 10px;
+      margin-top: 10px;
     }
 
     .spotify-album {
@@ -136,14 +158,22 @@
     <a class="back" href="/">Volver al home</a>
 
     <section class="hero">
-      <a href="https://a.co/d/0cAcmmZw" target="_blank" rel="noopener noreferrer" aria-label="Abrir Al Filo del Poder en Amazon">
-        <img class="cover" src="../portada%20al%20filo%20del%20poder.jpg" alt="Portada Al Filo del Poder" />
-      </a>
+      <aside class="cover-col">
+        <a class="cover-link" href="https://a.co/d/0cAcmmZw" target="_blank" rel="noopener noreferrer" aria-label="Abrir Al Filo del Poder en Amazon">
+          <img class="cover" src="../portada%20al%20filo%20del%20poder.jpg" alt="Portada Al Filo del Poder" />
+        </a>
+        <a class="cover-btn" href="../al-filo-del-poder-cap-1.pdf" target="_blank" rel="noopener noreferrer">Leer capitulo 1 (PDF)</a>
+      </aside>
 
       <article>
         <span class="eyebrow">Musica incidental</span>
         <h1>Al Filo del Poder</h1>
         <p class="lead">ebook de espionaje contemporaneo y acción</p>
+
+        <section class="details">
+          <h2>Sinopsis</h2>
+          <p class="synopsis">Una historia de intriga, poder y relaciones personales ambientada en el mundo contemporáneo de la diplomacia y la inteligencia. Esta novela combina tensión política, crítica social y emociones humanas con una prosa ágil y envolvente. Ideal para lectores que disfrutan de las tramas actuales, con profundidad cultural y giros estratégicos inesperados.</p>
+        </section>
 
         <div class="actions">
           <iframe
@@ -165,11 +195,6 @@
           <iframe style="border-radius:12px" src="https://open.spotify.com/embed/album/3Vg28hxk9Blnv5mt1GocQO?utm_source=generator" width="100%" height="352" frameBorder="0" allowfullscreen="" allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture" loading="lazy"></iframe>
           <iframe style="border-radius:12px" src="https://open.spotify.com/embed/album/0f5GHTjRaz2RCzdnq9bkd0?utm_source=generator" width="100%" height="352" frameBorder="0" allowfullscreen="" allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture" loading="lazy"></iframe>
         </div>
-
-        <section class="details">
-          <h2>Sinopsis</h2>
-          <p class="synopsis">Una historia de intriga, poder y relaciones personales ambientada en el mundo contemporáneo de la diplomacia y la inteligencia. Esta novela combina tensión política, crítica social y emociones humanas con una prosa ágil y envolvente. Ideal para lectores que disfrutan de las tramas actuales, con profundidad cultural y giros estratégicos inesperados.</p>
-        </section>
       </article>
     </section>
   </main>
