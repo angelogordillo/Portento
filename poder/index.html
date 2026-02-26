@@ -96,6 +96,7 @@
       flex-wrap: wrap;
       gap: 10px;
       margin-bottom: 10px;
+      align-items: center;
     }
 
     .btn {
@@ -120,6 +121,14 @@
       color: #fff;
       border: 1px solid rgba(255, 255, 255, 0.32);
       background: transparent;
+    }
+
+    .spotify-album {
+      width: min(100%, 420px);
+      height: 352px;
+      border: 0;
+      border-radius: 12px;
+      background: #000;
     }
 
     .details {
@@ -187,8 +196,22 @@
         <p class="lead">ebook de espionaje contemporaneo y acción</p>
 
         <div class="actions">
-          <a class="btn primary" href="https://a.co/d/0cAcmmZw" target="_blank" rel="noopener noreferrer">Ver en Amazon</a>
-          <a class="btn secondary" href="https://www.instagram.com/portentorecords/" target="_blank" rel="noopener noreferrer">Instagram</a>
+          <iframe
+            class="spotify-album"
+            src="https://open.spotify.com/embed/album/6kH82YjJ7EnP4Kh4cuAwqq?utm_source=generator"
+            title="Spotify album"
+            loading="lazy"
+            allowfullscreen
+            allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture">
+          </iframe>
+          <iframe
+            class="spotify-album"
+            src="https://open.spotify.com/embed/album/6kH82YjJ7EnP4Kh4cuAwqq?utm_source=generator"
+            title="Spotify album autor"
+            loading="lazy"
+            allowfullscreen
+            allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture">
+          </iframe>
         </div>
 
         <section class="details">
