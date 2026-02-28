@@ -105,6 +105,45 @@
 
     .book-cta:hover { transform: translateY(-2px); }
 
+    .forotp {
+      width: 100%;
+      border: 1px solid var(--line);
+      border-radius: 16px;
+      padding: 16px;
+      background: linear-gradient(155deg, rgba(255, 255, 255, 0.1), rgba(0, 0, 0, 0.4));
+      display: grid;
+      gap: 10px;
+      justify-items: center;
+      text-align: center;
+    }
+
+    .forotp h2 {
+      font-size: 22px;
+      letter-spacing: 0.01em;
+    }
+
+    .forotp p {
+      color: var(--muted);
+      max-width: 680px;
+    }
+
+    .forotp-cta {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      min-width: 220px;
+      color: #05060d;
+      text-decoration: none;
+      border-radius: 999px;
+      padding: 12px 18px;
+      font-weight: 800;
+      background: linear-gradient(130deg, var(--gold), #f2e071 50%, #9a990f);
+      box-shadow: 0 10px 24px rgba(0, 0, 0, 0.35);
+      transition: transform 0.2s ease;
+    }
+
+    .forotp-cta:hover { transform: translateY(-2px); }
+
     .social {
       margin-top: 8px;
       display: grid;
@@ -165,6 +204,12 @@
         <img class="book-cover" src="./portada%20al%20filo%20del%20poder.jpg" alt="Portada del ebook Al Filo del Poder" />
       </a>
       <a class="book-cta" href="/poder/">Ver musica incidental</a>
+    </section>
+
+    <section class="forotp" aria-label="Foro TP">
+      <h2>Foro TP</h2>
+      <p>Explora el album destacado del Foro TP en Spotify desde una vista dedicada para escuchar y compartir facilmente.</p>
+      <a class="forotp-cta" href="/forotp">Ir a Foro TP</a>
     </section>
 
     <section class="social" aria-label="Instagram de Portento">
