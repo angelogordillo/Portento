@@ -72,7 +72,7 @@
       width: 100%;
       display: grid;
       gap: 14px;
-      grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+      grid-template-columns: repeat(3, minmax(220px, 1fr));
     }
 
     .video-card {
@@ -216,23 +216,35 @@
       font-weight: 700;
       letter-spacing: 0.01em;
     }
+
+    @media (max-width: 900px) {
+      .video-grid {
+        grid-template-columns: repeat(2, minmax(220px, 1fr));
+      }
+    }
+
+    @media (max-width: 640px) {
+      .video-grid {
+        grid-template-columns: 1fr;
+      }
+    }
   </style>
 </head>
 <body>
   <main class="wrap">
     <img class="logo" src="./portento-logo.png" alt="Logo Portento" />
 
-    <iframe
-      class="video-frame"
-      src="https://www.youtube.com/embed/ktjeEKt8N1Q?rel=0"
-      title="Portento Video"
-      loading="lazy"
-      allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
-      allowfullscreen>
-    </iframe>
-
     <section class="video-section" aria-label="Videos adicionales">
       <div class="video-grid">
+        <article class="video-card">
+          <iframe
+            src="https://www.youtube.com/embed/ktjeEKt8N1Q?rel=0"
+            title="Portento Video Principal"
+            loading="lazy"
+            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+            allowfullscreen>
+          </iframe>
+        </article>
         <article class="video-card">
           <iframe
             src="https://www.youtube.com/embed/1WXWtdWHH3Q?rel=0"
@@ -264,6 +276,15 @@
           <iframe
             src="https://www.youtube.com/embed/9k2ssoMo3IM?rel=0"
             title="Video Portento 4"
+            loading="lazy"
+            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+            allowfullscreen>
+          </iframe>
+        </article>
+        <article class="video-card">
+          <iframe
+            src="https://www.youtube.com/embed/X8CICkhL6Xg?rel=0"
+            title="Video Portento 5"
             loading="lazy"
             allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
             allowfullscreen>
