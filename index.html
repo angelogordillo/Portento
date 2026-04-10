@@ -117,50 +117,18 @@
       pointer-events: none;
     }
 
-    .hero-grid {
-      display: grid;
-      grid-template-columns: minmax(0, 1.15fr) minmax(260px, 0.85fr);
-      gap: 26px;
-      align-items: center;
-    }
-
-    .eyebrow {
-      display: inline-flex;
-      align-items: center;
-      gap: 10px;
-      padding: 7px 12px;
-      border-radius: 999px;
-      background: var(--gold-soft);
-      color: var(--gold);
-      font-size: 12px;
-      font-weight: 800;
-      letter-spacing: 0.18em;
-      text-transform: uppercase;
-      margin-bottom: 16px;
-    }
-
     h1, h2, h3 {
       font-family: "Cormorant Garamond", Georgia, serif;
       line-height: 0.98;
       letter-spacing: 0.01em;
     }
 
-    h1 {
-      font-size: clamp(48px, 7vw, 88px);
-      margin-bottom: 16px;
-    }
-
-    .hero-copy p {
-      max-width: 58ch;
-      color: var(--muted);
-      font-size: 17px;
-    }
-
     .hero-actions {
       display: flex;
       flex-wrap: wrap;
       gap: 12px;
-      margin-top: 22px;
+      margin-top: 18px;
+      justify-content: center;
     }
 
     .btn {
@@ -194,6 +162,7 @@
       display: grid;
       justify-items: center;
       gap: 18px;
+      width: 100%;
     }
 
     .logo {
@@ -202,35 +171,6 @@
       border: 1px solid rgba(255, 255, 255, 0.18);
       background: #fff;
       box-shadow: 0 18px 40px rgba(0, 0, 0, 0.28);
-    }
-
-    .hero-stats {
-      width: 100%;
-      display: grid;
-      grid-template-columns: repeat(3, minmax(0, 1fr));
-      gap: 10px;
-    }
-
-    .stat {
-      border: 1px solid var(--line);
-      border-radius: 18px;
-      padding: 14px 12px;
-      background: rgba(255, 255, 255, 0.04);
-      text-align: center;
-    }
-
-    .stat strong {
-      display: block;
-      color: var(--gold);
-      font-size: 24px;
-      margin-bottom: 3px;
-    }
-
-    .stat span {
-      color: var(--muted);
-      font-size: 12px;
-      text-transform: uppercase;
-      letter-spacing: 0.08em;
     }
 
     .section {
@@ -510,7 +450,6 @@
         margin-bottom: 14px;
       }
       .topbar-inner,
-      .hero-grid,
       .media-grid,
       .lyrics-toolbar,
       .section-header {
@@ -529,7 +468,6 @@
         padding: 20px;
         border-radius: 24px;
       }
-      .hero-stats,
       .video-grid {
         grid-template-columns: 1fr;
       }
@@ -551,29 +489,11 @@
     </div>
 
     <section class="hero" id="inicio">
-      <div class="hero-grid">
-        <div class="hero-copy">
-          <div class="hero-actions">
-            <a class="btn primary" href="#letras">Explorar letras</a>
-            <a class="btn secondary" href="https://open.spotify.com/artist/0p0NNmXeyiUoxsalvITKgc" target="_blank" rel="noopener noreferrer">Escuchar en Spotify</a>
-          </div>
-        </div>
-        <div class="hero-side">
-          <img class="logo" src="./portento-logo.png" alt="Logo Portento" />
-          <div class="hero-stats" aria-label="Resumen del catalogo">
-            <article class="stat">
-              <strong>25</strong>
-              <span>Letras</span>
-            </article>
-            <article class="stat">
-              <strong>6</strong>
-              <span>Videos</span>
-            </article>
-            <article class="stat">
-              <strong>2</strong>
-              <span>Idiomas</span>
-            </article>
-          </div>
+      <div class="hero-side">
+        <img class="logo" src="./portento-logo.png" alt="Logo Portento" />
+        <div class="hero-actions">
+          <a class="btn primary" href="#letras">Explorar letras</a>
+          <a class="btn secondary" href="https://open.spotify.com/artist/0p0NNmXeyiUoxsalvITKgc" target="_blank" rel="noopener noreferrer">Escuchar en Spotify</a>
         </div>
       </div>
     </section>
