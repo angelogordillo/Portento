@@ -356,43 +356,56 @@
       margin-bottom: 14px;
     }
 
-    .lyrics-grid {
+    .lyrics-layout {
       display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-      gap: 14px;
+      grid-template-columns: minmax(260px, 340px) minmax(0, 1fr);
+      gap: 16px;
     }
 
-    .song-card {
+    .songs-list {
       border: 1px solid rgba(255, 255, 255, 0.1);
       border-radius: 20px;
-      background: rgba(255, 255, 255, 0.035);
-      overflow: hidden;
-    }
-
-    .song-card[open] {
-      background: rgba(255, 255, 255, 0.055);
-      border-color: rgba(219, 199, 104, 0.3);
-    }
-
-    .song-summary {
-      list-style: none;
-      cursor: pointer;
-      padding: 18px;
+      background: rgba(255, 255, 255, 0.03);
+      padding: 8px;
       display: grid;
+      gap: 8px;
+      align-content: start;
+    }
+
+    .song-item {
+      width: 100%;
+      text-align: left;
+      border: 1px solid transparent;
+      border-radius: 16px;
+      background: transparent;
+      color: var(--ink);
+      padding: 14px 16px;
+      font: inherit;
+      cursor: pointer;
+      transition: background 0.2s ease, border-color 0.2s ease, transform 0.2s ease;
+    }
+
+    .song-item:hover {
+      transform: translateX(2px);
+      background: rgba(255, 255, 255, 0.04);
+    }
+
+    .song-item.is-active {
+      border-color: rgba(219, 199, 104, 0.35);
+      background: rgba(219, 199, 104, 0.1);
+    }
+
+    .song-item-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
       gap: 10px;
     }
 
-    .song-summary::-webkit-details-marker { display: none; }
-
-    .song-topline {
-      display: flex;
-      justify-content: space-between;
-      gap: 12px;
-      align-items: start;
-    }
-
-    .song-summary h3 {
-      font-size: 30px;
+    .song-item-title {
+      font-size: 16px;
+      font-weight: 700;
+      letter-spacing: 0.01em;
     }
 
     .song-tag {
@@ -407,14 +420,39 @@
       text-transform: uppercase;
     }
 
-    .song-preview {
-      color: var(--muted);
-      font-size: 14px;
+    .song-detail {
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      border-radius: 20px;
+      background: rgba(255, 255, 255, 0.035);
+      padding: 20px;
+      min-height: 520px;
+      display: grid;
+      align-content: start;
     }
 
-    .song-content {
-      border-top: 1px solid rgba(255, 255, 255, 0.08);
-      padding: 0 18px 18px;
+    .song-detail-head {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 12px;
+      padding-bottom: 14px;
+      margin-bottom: 14px;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+    }
+
+    .song-detail-title {
+      font-size: 40px;
+    }
+
+    .song-detail-placeholder {
+      min-height: 320px;
+      display: grid;
+      place-items: center;
+      text-align: center;
+      color: var(--muted);
+      border: 1px dashed rgba(255, 255, 255, 0.12);
+      border-radius: 18px;
+      padding: 24px;
     }
 
     .lyrics-body {
@@ -422,7 +460,12 @@
       color: rgba(247, 244, 235, 0.9);
       font-size: 15px;
       line-height: 1.72;
-      padding-top: 16px;
+    }
+
+    .lyrics-body-wrap {
+      max-height: 680px;
+      overflow: auto;
+      padding-right: 6px;
     }
 
     .empty-state {
@@ -470,6 +513,7 @@
       .topbar-inner,
       .media-grid,
       .feature-grid,
+      .lyrics-layout,
       .lyrics-toolbar,
       .section-header {
         grid-template-columns: 1fr;
@@ -584,7 +628,10 @@
         </div>
 
         <p class="results-meta" id="lyrics-meta">Cargando letras...</p>
-        <div class="lyrics-grid" id="lyrics-grid"></div>
+        <div class="lyrics-layout">
+          <div class="songs-list" id="lyrics-grid"></div>
+          <div class="song-detail" id="song-detail"></div>
+        </div>
       </div>
     </section>
 
@@ -1213,13 +1260,28 @@ FOR ME TO ESCAPE OF THIS LONELINESS.` }
     ];
 
     const grid = document.getElementById("lyrics-grid");
+    const detail = document.getElementById("song-detail");
     const meta = document.getElementById("lyrics-meta");
     const searchInput = document.getElementById("lyrics-search");
     const filterButtons = Array.from(document.querySelectorAll(".filter-btn"));
     let activeFilter = "all";
+    let activeSongTitle = songs[0]?.title ?? "";
 
-    function songPreview(text) {
-      return text.split("\n").map((line) => line.trim()).filter(Boolean).slice(0, 2).join(" / ");
+    function renderDetail(song) {
+      if (!song) {
+        detail.innerHTML = '<div class="song-detail-placeholder">Selecciona una cancion para ver su letra completa.</div>';
+        return;
+      }
+
+      detail.innerHTML = `
+        <div class="song-detail-head">
+          <h3 class="song-detail-title">${song.title}</h3>
+          <span class="song-tag">${song.language === "es" ? "ES" : "EN"}</span>
+        </div>
+        <div class="lyrics-body-wrap">
+          <pre class="lyrics-body">${song.lyrics}</pre>
+        </div>
+      `;
     }
 
     function renderSongs() {
@@ -1234,23 +1296,31 @@ FOR ME TO ESCAPE OF THIS LONELINESS.` }
 
       if (!filtered.length) {
         grid.innerHTML = '<div class="empty-state">No encontramos resultados con ese filtro. Prueba con otro titulo o fragmento.</div>';
+        renderDetail(null);
         return;
       }
 
+      if (!filtered.some((song) => song.title === activeSongTitle)) {
+        activeSongTitle = filtered[0].title;
+      }
+
       grid.innerHTML = filtered.map((song) => `
-        <details class="song-card">
-          <summary class="song-summary">
-            <div class="song-topline">
-              <h3>${song.title}</h3>
-              <span class="song-tag">${song.language === "es" ? "ES" : "EN"}</span>
-            </div>
-            <p class="song-preview">${songPreview(song.lyrics)}</p>
-          </summary>
-          <div class="song-content">
-            <pre class="lyrics-body">${song.lyrics}</pre>
-          </div>
-        </details>
+        <button class="song-item ${song.title === activeSongTitle ? "is-active" : ""}" type="button" data-song-title="${song.title}">
+          <span class="song-item-row">
+            <span class="song-item-title">${song.title}</span>
+            <span class="song-tag">${song.language === "es" ? "ES" : "EN"}</span>
+          </span>
+        </button>
       `).join("");
+
+      renderDetail(filtered.find((song) => song.title === activeSongTitle) ?? filtered[0]);
+
+      grid.querySelectorAll(".song-item").forEach((button) => {
+        button.addEventListener("click", () => {
+          activeSongTitle = button.dataset.songTitle;
+          renderSongs();
+        });
+      });
     }
 
     filterButtons.forEach((button) => {
