@@ -465,6 +465,16 @@
               <option value="inside">Muy pegado al acorde</option>
             </select>
           </div>
+
+          <div class="control-group">
+            <label for="styleSelect">Estilo</label>
+            <select id="styleSelect">
+              <option value="balada" selected>Balada</option>
+              <option value="soul">Soul</option>
+              <option value="bolero">Bolero</option>
+              <option value="cinematica">Cinematica</option>
+            </select>
+          </div>
         </div>
 
         <div class="actions">
@@ -560,6 +570,7 @@
     const densitySelect = document.getElementById("densitySelect");
     const contourSelect = document.getElementById("contourSelect");
     const tensionSelect = document.getElementById("tensionSelect");
+    const styleSelect = document.getElementById("styleSelect");
     const progressionGrid = document.getElementById("progressionGrid");
     const bankGrid = document.getElementById("bankGrid");
     const lineOutput = document.getElementById("lineOutput");
@@ -572,6 +583,57 @@
 
     let latestPlayback = [];
     let audioCtx;
+
+    const STYLE_PROFILES = {
+      balada: {
+        label: "Balada",
+        riseBias: 1.2,
+        fallBias: 1.2,
+        leapPenalty: 5.6,
+        repeatPenalty: 9,
+        strongGuideBoost: 3.4,
+        neighborBoost: 1.8,
+        colorLift: 0.35,
+        phraseShape: [0, 1, 0, -1],
+        rhythm: [0.34, 0.26, 0.24, 0.4]
+      },
+      soul: {
+        label: "Soul",
+        riseBias: 0.95,
+        fallBias: 1.05,
+        leapPenalty: 4.2,
+        repeatPenalty: 6,
+        strongGuideBoost: 2.8,
+        neighborBoost: 2.2,
+        colorLift: 1,
+        phraseShape: [0, 1, -1, 0, 1, 0],
+        rhythm: [0.22, 0.18, 0.22, 0.28, 0.18, 0.32]
+      },
+      bolero: {
+        label: "Bolero",
+        riseBias: 1.15,
+        fallBias: 1.4,
+        leapPenalty: 6.2,
+        repeatPenalty: 7.5,
+        strongGuideBoost: 3.8,
+        neighborBoost: 2,
+        colorLift: 0.55,
+        phraseShape: [0, -1, 1, -1],
+        rhythm: [0.36, 0.18, 0.3, 0.32]
+      },
+      cinematica: {
+        label: "Cinematica",
+        riseBias: 0.9,
+        fallBias: 0.9,
+        leapPenalty: 3.2,
+        repeatPenalty: 5.5,
+        strongGuideBoost: 2.2,
+        neighborBoost: 1.1,
+        colorLift: 1.4,
+        phraseShape: [0, 2, -1, 1, -2, 1],
+        rhythm: [0.42, 0.24, 0.3, 0.46, 0.24, 0.34]
+      }
+    };
 
     function populateKeys() {
       NOTE_NAMES.forEach((note) => {
@@ -661,30 +723,34 @@
       return new Set(notes.map((note) => mod(note, 12)));
     }
 
-    function scoreCandidate(candidate, anchor, direction, previousPitch, chordClasses, guideClasses, isStrongBeat) {
+    function getStyleProfile(styleName) {
+      return STYLE_PROFILES[styleName] ?? STYLE_PROFILES.balada;
+    }
+
+    function scoreCandidate(candidate, anchor, direction, previousPitch, chordClasses, guideClasses, isStrongBeat, styleProfile) {
       const distance = Math.abs(candidate - anchor);
       let score = distance;
 
       if (previousPitch !== null) {
-        if (candidate === previousPitch) score += 8;
+        if (candidate === previousPitch) score += styleProfile.repeatPenalty;
         if (mod(candidate, 12) === mod(previousPitch, 12)) score += 2.5;
-        if (distance > 7) score += 4.5;
-        if (distance >= 1 && distance <= 4) score -= 1.2;
+        if (distance > 7) score += styleProfile.leapPenalty;
+        if (distance >= 1 && distance <= 4) score -= styleProfile.neighborBoost;
       }
 
-      if (direction === "rise" && candidate < anchor) score += 3.5 + (anchor - candidate) * 0.12;
-      if (direction === "fall" && candidate > anchor) score += 3.5 + (candidate - anchor) * 0.12;
+      if (direction === "rise" && candidate < anchor) score += 3.5 * styleProfile.riseBias + (anchor - candidate) * 0.12;
+      if (direction === "fall" && candidate > anchor) score += 3.5 * styleProfile.fallBias + (candidate - anchor) * 0.12;
 
-      if (isStrongBeat && guideClasses.has(mod(candidate, 12))) score -= 2.8;
+      if (isStrongBeat && guideClasses.has(mod(candidate, 12))) score -= styleProfile.strongGuideBoost;
       if (isStrongBeat && chordClasses.has(mod(candidate, 12))) score -= 1.6;
 
       return score;
     }
 
-    function pickCandidate(candidates, anchor, direction, previousPitch, chordClasses, guideClasses, isStrongBeat) {
+    function pickCandidate(candidates, anchor, direction, previousPitch, chordClasses, guideClasses, isStrongBeat, styleProfile) {
       const scored = candidates.map((candidate) => ({
         candidate,
-        score: scoreCandidate(candidate, anchor, direction, previousPitch, chordClasses, guideClasses, isStrongBeat)
+        score: scoreCandidate(candidate, anchor, direction, previousPitch, chordClasses, guideClasses, isStrongBeat, styleProfile)
       }));
 
       scored.sort((a, b) => a.score - b.score);
@@ -693,7 +759,7 @@
       return weightedPool[Math.floor(Math.random() * weightedPool.length)] ?? anchor;
     }
 
-    function weightedChordPool(chord, pitchPool, colorMode) {
+    function weightedChordPool(chord, pitchPool, colorMode, styleProfile) {
       const chordClasses = new Set(chord.tones.map((note) => mod(note, 12)));
       const colorClasses = new Set(chord.colors.map((note) => mod(note, 12)));
       return pitchPool.filter((pitch) => {
@@ -707,28 +773,31 @@
         if (colorMode === "gentle") {
           return colorClasses.has(pitchClass) && Math.random() > 0.35;
         }
-        return colorClasses.has(pitchClass) || Math.random() > 0.72;
+        return colorClasses.has(pitchClass) || Math.random() > Math.max(0.3, 0.72 - styleProfile.colorLift * 0.14);
       });
     }
 
-    function chooseNextPitch(chord, pitchPool, previousPitch, contour, colorMode, isStrongBeat, stepIndex) {
+    function chooseNextPitch(chord, pitchPool, previousPitch, contour, colorMode, isStrongBeat, stepIndex, styleProfile) {
       const chordClasses = noteClassSet(chord.tones);
       const guideClasses = noteClassSet(chord.guide);
-      let candidates = weightedChordPool(chord, pitchPool, colorMode);
+      let candidates = weightedChordPool(chord, pitchPool, colorMode, styleProfile);
       if (isStrongBeat) {
         const strong = candidates.filter((pitch) => guideClasses.has(mod(pitch, 12)) || chordClasses.has(mod(pitch, 12)));
         if (strong.length) {
           candidates = strong;
         }
       }
-      const anchor = previousPitch ?? ((Number(rangeSelect.value) + 1) * 12 + mod(chord.root, 12));
-      const direction = getStepDirection(contour, stepIndex);
-      return pickCandidate(candidates, anchor, direction, previousPitch, chordClasses, guideClasses, isStrongBeat);
+      const shapeOffset = styleProfile.phraseShape[stepIndex % styleProfile.phraseShape.length] ?? 0;
+      const anchorBase = previousPitch ?? ((Number(rangeSelect.value) + 1) * 12 + mod(chord.root, 12));
+      const anchor = anchorBase + shapeOffset;
+      const direction = getStepDirection(contour, stepIndex + (shapeOffset > 0 ? 1 : 0));
+      return pickCandidate(candidates, anchor, direction, previousPitch, chordClasses, guideClasses, isStrongBeat, styleProfile);
     }
 
     function generatePhrase(chords, options) {
       const pitchPool = buildPitchPool(options.key, options.mode, options.baseOctave);
       const notesPerChord = Number(options.density);
+      const styleProfile = getStyleProfile(options.style);
       const output = [];
       const guideText = [];
       let previousPitch = null;
@@ -737,7 +806,7 @@
         const segment = [];
         for (let step = 0; step < notesPerChord; step += 1) {
           const isStrongBeat = step === 0 || step === Math.floor(notesPerChord / 2);
-          const note = chooseNextPitch(chord, pitchPool, previousPitch, options.contour, options.colorMode, isStrongBeat, step);
+          const note = chooseNextPitch(chord, pitchPool, previousPitch, options.contour, options.colorMode, isStrongBeat, step, styleProfile);
           segment.push(note);
           previousPitch = note;
         }
@@ -754,11 +823,12 @@
 
     function generateCell(chord, options, previousPitch = null) {
       const pitchPool = buildPitchPool(options.key, options.mode, options.baseOctave);
+      const styleProfile = getStyleProfile(options.style);
       const contour = options.contour === "wave" ? (Math.random() > 0.5 ? "rise" : "fall") : options.contour;
       const notes = [];
       let pivot = previousPitch;
       for (let i = 0; i < 4; i += 1) {
-        const note = chooseNextPitch(chord, pitchPool, pivot, contour, options.colorMode, i === 0 || i === 2, i);
+        const note = chooseNextPitch(chord, pitchPool, pivot, contour, options.colorMode, i === 0 || i === 2, i, styleProfile);
         notes.push(note);
         pivot = note;
       }
@@ -816,7 +886,8 @@
         baseOctave: Number(rangeSelect.value),
         density: densitySelect.value,
         contour: contourSelect.value,
-        colorMode: tensionSelect.value
+        colorMode: tensionSelect.value,
+        style: styleSelect.value
       };
     }
 
@@ -833,7 +904,7 @@
     function generate() {
       const state = buildState();
       contextChip.textContent = `${state.options.key} ${MODES[state.options.mode].label}`;
-      progressionName.textContent = state.progression.name;
+      progressionName.textContent = `${state.progression.name} · ${getStyleProfile(state.options.style).label}`;
       renderProgression(state.chords);
       renderBank(state.allChords, state.options);
       lineOutput.textContent = formatLine(state.chords, state.phrase.segments);
@@ -854,15 +925,17 @@
         await audioCtx.resume();
       }
       const now = audioCtx.currentTime;
+      const styleProfile = getStyleProfile(styleSelect.value);
       latestPlayback.forEach((midi, index) => {
-        const start = now + index * 0.24;
-        const end = start + 0.2;
+        const stepDuration = styleProfile.rhythm[index % styleProfile.rhythm.length] ?? 0.24;
+        const start = now + latestPlayback.slice(0, index).reduce((sum, _, i) => sum + (styleProfile.rhythm[i % styleProfile.rhythm.length] ?? 0.24), 0);
+        const end = start + Math.max(0.16, stepDuration * 0.88);
         const osc = audioCtx.createOscillator();
         const gain = audioCtx.createGain();
-        osc.type = index % 4 === 0 ? "triangle" : "sine";
+        osc.type = styleSelect.value === "cinematica" ? "sawtooth" : index % 4 === 0 ? "triangle" : "sine";
         osc.frequency.value = midiToFrequency(midi);
         gain.gain.setValueAtTime(0.0001, start);
-        gain.gain.exponentialRampToValueAtTime(0.16, start + 0.02);
+        gain.gain.exponentialRampToValueAtTime(styleSelect.value === "bolero" ? 0.14 : 0.16, start + 0.02);
         gain.gain.exponentialRampToValueAtTime(0.0001, end);
         osc.connect(gain);
         gain.connect(audioCtx.destination);
@@ -901,6 +974,7 @@
     densitySelect.addEventListener("change", generate);
     contourSelect.addEventListener("change", generate);
     tensionSelect.addEventListener("change", generate);
+    styleSelect.addEventListener("change", generate);
     generateBtn.addEventListener("click", generate);
     playBtn.addEventListener("click", playSequence);
     copyBtn.addEventListener("click", copyOutput);
