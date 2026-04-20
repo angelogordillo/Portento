@@ -481,6 +481,7 @@
           <button class="btn primary" id="generateBtn" type="button">Generar linea</button>
           <button class="btn secondary" id="playBtn" type="button">Escuchar</button>
           <button class="btn secondary" id="copyBtn" type="button">Copiar texto</button>
+          <button class="btn secondary" id="midiBtn" type="button">Exportar MIDI</button>
         </div>
 
         <p class="footer-note">Acceso sin enlace publico y marcado con <code>noindex</code>. Esta version queda discreta dentro del sitio y pensada para uso directo por URL.</p>
@@ -580,8 +581,10 @@
     const generateBtn = document.getElementById("generateBtn");
     const playBtn = document.getElementById("playBtn");
     const copyBtn = document.getElementById("copyBtn");
+    const midiBtn = document.getElementById("midiBtn");
 
     let latestPlayback = [];
+    let latestState = null;
     let audioCtx;
 
     const STYLE_PROFILES = {
@@ -871,6 +874,125 @@
       return segments.flatMap((segment) => segment);
     }
 
+    function getPlaybackDurations(notesLength, styleProfile) {
+      return Array.from({ length: notesLength }, (_, index) => styleProfile.rhythm[index % styleProfile.rhythm.length] ?? 0.24);
+    }
+
+    function encodeVariableLength(value) {
+      let buffer = value & 0x7f;
+      const bytes = [];
+      while ((value >>= 7)) {
+        buffer <<= 8;
+        buffer |= ((value & 0x7f) | 0x80);
+      }
+      while (true) {
+        bytes.push(buffer & 0xff);
+        if (buffer & 0x80) {
+          buffer >>= 8;
+        } else {
+          break;
+        }
+      }
+      return bytes;
+    }
+
+    function createTrackChunk(bytes) {
+      const length = bytes.length;
+      return [
+        0x4d, 0x54, 0x72, 0x6b,
+        (length >> 24) & 0xff,
+        (length >> 16) & 0xff,
+        (length >> 8) & 0xff,
+        length & 0xff,
+        ...bytes
+      ];
+    }
+
+    function createHeaderChunk(trackCount) {
+      return [
+        0x4d, 0x54, 0x68, 0x64,
+        0x00, 0x00, 0x00, 0x06,
+        0x00, 0x01,
+        (trackCount >> 8) & 0xff, trackCount & 0xff,
+        0x01, 0xe0
+      ];
+    }
+
+    function buildTempoTrack(bpm = 96) {
+      const microsecondsPerQuarter = Math.round(60000000 / bpm);
+      const bytes = [
+        0x00, 0xff, 0x51, 0x03,
+        (microsecondsPerQuarter >> 16) & 0xff,
+        (microsecondsPerQuarter >> 8) & 0xff,
+        microsecondsPerQuarter & 0xff,
+        0x00, 0xff, 0x58, 0x04, 0x04, 0x02, 0x18, 0x08,
+        0x00, 0xff, 0x2f, 0x00
+      ];
+      return createTrackChunk(bytes);
+    }
+
+    function styleToTempo(styleName) {
+      if (styleName === "bolero") return 86;
+      if (styleName === "soul") return 94;
+      if (styleName === "cinematica") return 78;
+      return 90;
+    }
+
+    function buildNoteTrack(playback, durations, trackName) {
+      const ticksPerQuarter = 480;
+      const channel = 0;
+      const velocity = 88;
+      const bytes = [
+        0x00, 0xff, 0x03, trackName.length,
+        ...Array.from(trackName).map((char) => char.charCodeAt(0)),
+        0x00, 0xc0 | channel, 0x51
+      ];
+
+      playback.forEach((midi, index) => {
+        const durationSeconds = durations[index] ?? 0.24;
+        const noteTicks = Math.max(60, Math.round(durationSeconds * ticksPerQuarter * 2));
+        bytes.push(...encodeVariableLength(0), 0x90 | channel, midi & 0x7f, velocity);
+        bytes.push(...encodeVariableLength(noteTicks), 0x80 | channel, midi & 0x7f, 0x00);
+      });
+
+      bytes.push(0x00, 0xff, 0x2f, 0x00);
+      return createTrackChunk(bytes);
+    }
+
+    function downloadMidi() {
+      if (!latestState) {
+        generate();
+      }
+
+      const state = latestState;
+      const styleProfile = getStyleProfile(state.options.style);
+      const playback = flattenSegments(state.phrase.segments);
+      const durations = getPlaybackDurations(playback.length, styleProfile);
+      const tempoTrack = buildTempoTrack(styleToTempo(state.options.style));
+      const noteTrack = buildNoteTrack(playback, durations, `Portento ${state.options.key} ${state.options.mode}`);
+      const bytes = new Uint8Array([
+        ...createHeaderChunk(2),
+        ...tempoTrack,
+        ...noteTrack
+      ]);
+
+      const blob = new Blob([bytes], { type: "audio/midi" });
+      const url = URL.createObjectURL(blob);
+      const link = document.createElement("a");
+      const slug = `${state.options.key}-${state.options.mode}-${state.progression.id}-${state.options.style}`.toLowerCase();
+      link.href = url;
+      link.download = `portento-armonia-${slug}.mid`;
+      document.body.appendChild(link);
+      link.click();
+      link.remove();
+      URL.revokeObjectURL(url);
+
+      midiBtn.textContent = "MIDI listo";
+      window.setTimeout(() => {
+        midiBtn.textContent = "Exportar MIDI";
+      }, 1400);
+    }
+
     function formatLine(chords, segments) {
       return chords.map((chord, index) => {
         const notes = segments[index].map(midiToNoteName).join("  ");
@@ -903,6 +1025,7 @@
 
     function generate() {
       const state = buildState();
+      latestState = state;
       contextChip.textContent = `${state.options.key} ${MODES[state.options.mode].label}`;
       progressionName.textContent = `${state.progression.name} · ${getStyleProfile(state.options.style).label}`;
       renderProgression(state.chords);
@@ -926,9 +1049,11 @@
       }
       const now = audioCtx.currentTime;
       const styleProfile = getStyleProfile(styleSelect.value);
+      const durations = getPlaybackDurations(latestPlayback.length, styleProfile);
+      let cursor = now;
       latestPlayback.forEach((midi, index) => {
-        const stepDuration = styleProfile.rhythm[index % styleProfile.rhythm.length] ?? 0.24;
-        const start = now + latestPlayback.slice(0, index).reduce((sum, _, i) => sum + (styleProfile.rhythm[i % styleProfile.rhythm.length] ?? 0.24), 0);
+        const stepDuration = durations[index];
+        const start = cursor;
         const end = start + Math.max(0.16, stepDuration * 0.88);
         const osc = audioCtx.createOscillator();
         const gain = audioCtx.createGain();
@@ -941,6 +1066,7 @@
         gain.connect(audioCtx.destination);
         osc.start(start);
         osc.stop(end + 0.02);
+        cursor += stepDuration;
       });
     }
 
@@ -978,6 +1104,7 @@
     generateBtn.addEventListener("click", generate);
     playBtn.addEventListener("click", playSequence);
     copyBtn.addEventListener("click", copyOutput);
+    midiBtn.addEventListener("click", downloadMidi);
   </script>
 </body>
 </html>
