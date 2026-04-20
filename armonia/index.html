@@ -617,16 +617,21 @@
       const guide = descriptor.guide.map((interval) => scaleRoot + interval);
       const colors = descriptor.colors.map((interval) => scaleRoot + interval);
       const chordToneSet = Array.from(new Set([...triad, ...guide]));
+      const fullChordTones = Array.from(new Set([...triad, ...guide])).sort((a, b) => a - b);
+      const rootLabel = semitoneToNote(scaleRoot);
       return {
         degreeIndex,
         roman: descriptor.roman,
         quality: descriptor.quality,
         root: scaleRoot,
+        rootLabel,
+        chordName: `${rootLabel}${descriptor.quality}`,
         triad,
         guide,
         colors,
+        fullChordTones,
         tones: chordToneSet,
-        notesLabel: triad.map((note) => semitoneToNote(note)).join(" - ")
+        notesLabel: fullChordTones.map((note) => semitoneToNote(note)).join(" - ")
       };
     }
 
@@ -646,15 +651,46 @@
       return pool.sort((a, b) => a - b);
     }
 
-    function nearestCandidates(candidates, anchor, direction) {
-      const ranked = [...candidates].sort((a, b) => Math.abs(a - anchor) - Math.abs(b - anchor));
-      if (direction === "rise") {
-        ranked.sort((a, b) => (a < anchor) - (b < anchor) || Math.abs(a - anchor) - Math.abs(b - anchor));
+    function getStepDirection(contour, stepIndex) {
+      if (contour === "rise") return "rise";
+      if (contour === "fall") return "fall";
+      return stepIndex % 4 < 2 ? "rise" : "fall";
+    }
+
+    function noteClassSet(notes) {
+      return new Set(notes.map((note) => mod(note, 12)));
+    }
+
+    function scoreCandidate(candidate, anchor, direction, previousPitch, chordClasses, guideClasses, isStrongBeat) {
+      const distance = Math.abs(candidate - anchor);
+      let score = distance;
+
+      if (previousPitch !== null) {
+        if (candidate === previousPitch) score += 8;
+        if (mod(candidate, 12) === mod(previousPitch, 12)) score += 2.5;
+        if (distance > 7) score += 4.5;
+        if (distance >= 1 && distance <= 4) score -= 1.2;
       }
-      if (direction === "fall") {
-        ranked.sort((a, b) => (a > anchor) - (b > anchor) || Math.abs(a - anchor) - Math.abs(b - anchor));
-      }
-      return ranked;
+
+      if (direction === "rise" && candidate < anchor) score += 3.5 + (anchor - candidate) * 0.12;
+      if (direction === "fall" && candidate > anchor) score += 3.5 + (candidate - anchor) * 0.12;
+
+      if (isStrongBeat && guideClasses.has(mod(candidate, 12))) score -= 2.8;
+      if (isStrongBeat && chordClasses.has(mod(candidate, 12))) score -= 1.6;
+
+      return score;
+    }
+
+    function pickCandidate(candidates, anchor, direction, previousPitch, chordClasses, guideClasses, isStrongBeat) {
+      const scored = candidates.map((candidate) => ({
+        candidate,
+        score: scoreCandidate(candidate, anchor, direction, previousPitch, chordClasses, guideClasses, isStrongBeat)
+      }));
+
+      scored.sort((a, b) => a.score - b.score);
+      const finalists = scored.slice(0, Math.min(5, scored.length));
+      const weightedPool = finalists.flatMap((entry, index) => Array(Math.max(1, 5 - index)).fill(entry.candidate));
+      return weightedPool[Math.floor(Math.random() * weightedPool.length)] ?? anchor;
     }
 
     function weightedChordPool(chord, pitchPool, colorMode) {
@@ -675,9 +711,9 @@
       });
     }
 
-    function chooseNextPitch(chord, pitchPool, previousPitch, contour, colorMode, isStrongBeat) {
-      const chordClasses = new Set(chord.tones.map((note) => mod(note, 12)));
-      const guideClasses = new Set(chord.guide.map((note) => mod(note, 12)));
+    function chooseNextPitch(chord, pitchPool, previousPitch, contour, colorMode, isStrongBeat, stepIndex) {
+      const chordClasses = noteClassSet(chord.tones);
+      const guideClasses = noteClassSet(chord.guide);
       let candidates = weightedChordPool(chord, pitchPool, colorMode);
       if (isStrongBeat) {
         const strong = candidates.filter((pitch) => guideClasses.has(mod(pitch, 12)) || chordClasses.has(mod(pitch, 12)));
@@ -686,8 +722,8 @@
         }
       }
       const anchor = previousPitch ?? ((Number(rangeSelect.value) + 1) * 12 + mod(chord.root, 12));
-      const ranked = nearestCandidates(candidates, anchor, contour);
-      return ranked[0] ?? anchor;
+      const direction = getStepDirection(contour, stepIndex);
+      return pickCandidate(candidates, anchor, direction, previousPitch, chordClasses, guideClasses, isStrongBeat);
     }
 
     function generatePhrase(chords, options) {
@@ -701,12 +737,12 @@
         const segment = [];
         for (let step = 0; step < notesPerChord; step += 1) {
           const isStrongBeat = step === 0 || step === Math.floor(notesPerChord / 2);
-          const note = chooseNextPitch(chord, pitchPool, previousPitch, options.contour, options.colorMode, isStrongBeat);
+          const note = chooseNextPitch(chord, pitchPool, previousPitch, options.contour, options.colorMode, isStrongBeat, step);
           segment.push(note);
           previousPitch = note;
         }
         output.push(segment);
-        const guideLine = `${index + 1}. ${chord.roman}${chord.quality} -> ${segment.slice(0, 3).map(midiToNoteName).join(" / ")}`;
+        const guideLine = `${index + 1}. ${chord.chordName} (${chord.roman}) -> ${segment.slice(0, 3).map(midiToNoteName).join(" / ")}`;
         guideText.push(guideLine);
       });
 
@@ -722,7 +758,7 @@
       const notes = [];
       let pivot = previousPitch;
       for (let i = 0; i < 4; i += 1) {
-        const note = chooseNextPitch(chord, pitchPool, pivot, contour, options.colorMode, i === 0 || i === 2);
+        const note = chooseNextPitch(chord, pitchPool, pivot, contour, options.colorMode, i === 0 || i === 2, i);
         notes.push(note);
         pivot = note;
       }
@@ -735,8 +771,8 @@
         const card = document.createElement("article");
         card.className = "chord-card";
         card.innerHTML = `
-          <strong>${chord.roman}${chord.quality}</strong>
-          <div class="meta">${semitoneToNote(chord.root)} ${chord.quality}</div>
+          <strong>${chord.chordName}</strong>
+          <div class="meta">Funcion ${chord.roman}</div>
           <div class="bank-notes">${chord.notesLabel}</div>
         `;
         progressionGrid.appendChild(card);
@@ -752,8 +788,8 @@
         const card = document.createElement("article");
         card.className = "bank-card";
         card.innerHTML = `
-          <strong>${chord.roman}${chord.quality}</strong>
-          <div class="meta">${semitoneToNote(chord.root)} ${chord.quality}</div>
+          <strong>${chord.chordName}</strong>
+          <div class="meta">Funcion ${chord.roman}</div>
           <div class="bank-notes">${cell.map(midiToNoteName).join("  ")}</div>
           <div class="helper">Acorde: ${chord.notesLabel}</div>
         `;
@@ -768,7 +804,7 @@
     function formatLine(chords, segments) {
       return chords.map((chord, index) => {
         const notes = segments[index].map(midiToNoteName).join("  ");
-        return `${index + 1}. ${chord.roman}${chord.quality} | ${notes}`;
+        return `${index + 1}. ${chord.chordName} (${chord.roman}) | ${notes}`;
       }).join("\n");
     }
 
