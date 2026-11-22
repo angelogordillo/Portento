@@ -3,45 +3,212 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Deporte | Portento</title>
+  <title>Esgrima recreativa en la Del Valle | Portento</title>
+  <meta name="description" content="Club de esgrima recreativa para jóvenes y adultos en la colonia Del Valle, CDMX. Especialidad en espada: todo el cuerpo es blanco válido y las reglas son las más sencillas de las tres armas." />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500&display=swap" />
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&display=swap" />
   <style>
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    html { scroll-behavior: smooth; }
+
     body {
-      min-height: 100vh;
-      display: flex;
-      flex-direction: column;
       background: #ffffff;
       color: #111111;
       font-family: "Inter", system-ui, sans-serif;
+      font-size: 17px;
+      line-height: 1.6;
       -webkit-font-smoothing: antialiased;
     }
-    header { padding: 40px 32px 0; display: flex; justify-content: center; }
+
+    a { color: #111111; }
+
+    .wrap { max-width: 1040px; margin: 0 auto; padding: 0 32px; }
+
+    /* Header */
+    header { padding: 40px 0 0; }
+    .top {
+      display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 16px;
+    }
     .brand {
-      font-size: 15px; font-weight: 500; letter-spacing: 0.42em; padding-left: 0.42em;
-      color: #111111; text-decoration: none;
+      font-size: 15px; font-weight: 500; letter-spacing: 0.42em;
+      text-decoration: none;
     }
-    main {
-      flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: center;
-      gap: 28px; padding: 64px 32px; text-align: center;
+    .top nav { display: flex; flex-wrap: wrap; gap: 8px; }
+    .top nav a {
+      font-size: 14px; color: #555555; text-decoration: none; padding: 10px 12px;
     }
-    svg { width: 160px; height: 160px; }
-    h1 { font-size: 14px; font-weight: 400; letter-spacing: 0.28em; padding-left: 0.28em; text-transform: uppercase; }
-    p { font-size: 15px; color: #6b6b6b; }
-    .back { font-size: 14px; color: #111111; text-decoration: none; border-bottom: 1px solid #111111; padding-bottom: 2px; }
+    .top nav a:hover { color: #111111; }
+
+    /* Hero */
+    .hero {
+      padding: 112px 0 96px;
+      display: flex; flex-direction: column; align-items: center; text-align: center; gap: 28px;
+    }
+    .hero svg { width: 140px; height: 140px; }
+    .eyebrow {
+      font-size: 13px; letter-spacing: 0.28em; padding-left: 0.28em; text-transform: uppercase; color: #555555;
+    }
+    h1 {
+      font-size: clamp(40px, 6.5vw, 72px); font-weight: 300; line-height: 1.05; letter-spacing: -0.02em;
+      max-width: 15ch;
+    }
+    .lead { font-size: 19px; color: #555555; max-width: 54ch; }
+    .actions { display: flex; flex-wrap: wrap; justify-content: center; gap: 12px; padding-top: 8px; }
+    .btn {
+      display: inline-flex; align-items: center; min-height: 48px; padding: 0 26px;
+      border-radius: 999px; font-size: 15px; font-weight: 500; text-decoration: none;
+      border: 1px solid #111111; transition: opacity 0.15s;
+    }
+    .btn:hover { opacity: 0.7; }
+    .btn-dark { background: #111111; color: #ffffff; }
+    .btn-light { background: transparent; color: #111111; }
+
+    /* Sections */
+    section { border-top: 1px solid #e6e6e6; padding: 96px 0; }
+    .label {
+      font-size: 13px; letter-spacing: 0.28em; text-transform: uppercase; color: #555555; margin-bottom: 16px;
+    }
+    h2 { font-size: clamp(30px, 4vw, 44px); font-weight: 300; line-height: 1.15; letter-spacing: -0.01em; max-width: 22ch; margin-bottom: 56px; }
+
+    .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 48px; }
+    .item h3 { font-size: 19px; font-weight: 500; margin-bottom: 10px; }
+    .item p { color: #555555; }
+    .num { font-size: 13px; color: #8a8a8a; letter-spacing: 0.1em; margin-bottom: 16px; display: block; }
+
+    .compare { width: 100%; border-collapse: collapse; font-size: 16px; }
+    .compare-box { overflow-x: auto; margin-top: 64px; }
+    .compare caption { text-align: left; font-size: 13px; letter-spacing: 0.28em; text-transform: uppercase; color: #555555; padding-bottom: 16px; }
+    .compare th, .compare td { text-align: left; padding: 16px 16px 16px 0; border-bottom: 1px solid #e6e6e6; vertical-align: top; }
+    .compare th { font-weight: 500; }
+    .compare thead th { font-size: 14px; color: #555555; font-weight: 500; }
+    .compare .hl { font-weight: 500; }
+
+    .steps { list-style: none; display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 48px; }
+
+    .info { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 48px; }
+    .info dt { font-size: 13px; letter-spacing: 0.2em; text-transform: uppercase; color: #555555; margin-bottom: 8px; }
+    .info dd { font-size: 18px; }
+    .ph { color: #8a8a8a; }
+
+    .cta { text-align: center; display: flex; flex-direction: column; align-items: center; gap: 24px; }
+    .cta h2 { margin: 0 auto; }
+
+    footer { border-top: 1px solid #e6e6e6; padding: 40px 0; }
+    footer .wrap { display: flex; flex-wrap: wrap; justify-content: space-between; gap: 16px; font-size: 14px; color: #555555; }
+    footer a { color: #555555; text-decoration: none; }
   </style>
 </head>
 <body>
+
   <header>
-    <a class="brand" href="/">PORTENTO</a>
+    <div class="wrap top">
+      <a class="brand" href="/">PORTENTO</a>
+      <nav aria-label="Secciones">
+        <a href="#espada">La espada</a>
+        <a href="#clases">Clases</a>
+      </nav>
+    </div>
   </header>
+
   <main>
-    <svg aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="0.9" stroke-linecap="round" stroke-linejoin="round"><path d="M8 2l2.6 7.2"/><path d="M16 2l-2.6 7.2"/><circle cx="12" cy="15" r="6"/><path d="M12 12.2l0.9 1.8 2 0.3-1.45 1.4 0.35 2-1.8-0.95-1.8 0.95 0.35-2-1.45-1.4 2-0.3z"/></svg>
-    <h1>Deporte</h1>
-    <p>Próximamente.</p>
-    <a class="back" href="/">Volver</a>
+    <div class="wrap hero">
+      <svg aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="0.8" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M21.5 2.5L9.2 14.8"/>
+        <path d="M6.8 12.4a4.2 4.2 0 0 0 4.8 4.8"/>
+        <path d="M8 16l-3.6 3.6"/>
+        <path d="M2.8 18l3.2 3.2"/>
+      </svg>
+      <p class="eyebrow">Esgrima recreativa · Colonia Del Valle, CDMX</p>
+      <h1>Aprende esgrima con la espada.</h1>
+      <p class="lead">Un club para jóvenes y adultos que quieren empezar desde cero. Nos especializamos en espada: todo el cuerpo es blanco válido y sus reglas son las más fáciles de entender de las tres armas.</p>
+      <div class="actions">
+        <a class="btn btn-dark" href="#espada">¿Por qué espada?</a>
+      </div>
+    </div>
+
+    <section id="espada">
+      <div class="wrap">
+        <p class="label">La espada</p>
+        <h2>El arma más directa para empezar.</h2>
+        <div class="grid">
+          <div class="item">
+            <span class="num">01</span>
+            <h3>Todo el cuerpo cuenta</h3>
+            <p>De la cabeza a los pies, cualquier zona es blanco válido. No hay que memorizar qué partes cuentan y cuáles no.</p>
+          </div>
+          <div class="item">
+            <span class="num">02</span>
+            <h3>Gana quien toca primero</h3>
+            <p>En espada no hay prioridad ni derecho de ataque. El aparato eléctrico marca el toque de quien llega antes con la punta.</p>
+          </div>
+          <div class="item">
+            <span class="num">03</span>
+            <h3>El toque doble vale para los dos</h3>
+            <p>Si ambos tocan casi al mismo tiempo, los dos suman punto. Por eso cada asalto pide paciencia, distancia y buena lectura del rival.</p>
+          </div>
+        </div>
+
+        <div class="compare-box">
+          <table class="compare">
+            <caption>Las tres armas, en corto</caption>
+            <thead>
+              <tr><th scope="col">Arma</th><th scope="col">Blanco válido</th><th scope="col">Cómo se toca</th><th scope="col">Prioridad</th></tr>
+            </thead>
+            <tbody>
+              <tr><th scope="row" class="hl">Espada</th><td class="hl">Todo el cuerpo</td><td class="hl">Con la punta</td><td class="hl">No: cuenta quien toca primero</td></tr>
+              <tr><th scope="row">Florete</th><td>El tronco</td><td>Con la punta</td><td>Sí: hay que conocer las reglas de prioridad</td></tr>
+              <tr><th scope="row">Sable</th><td>De la cintura para arriba</td><td>Con la punta y el filo</td><td>Sí: hay que conocer las reglas de prioridad</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+
+    <section id="clases">
+      <div class="wrap">
+        <p class="label">Clases</p>
+        <h2>Sin experiencia previa. A tu ritmo.</h2>
+        <ol class="steps">
+          <li class="item">
+            <span class="num">01</span>
+            <h3>Calentamiento</h3>
+            <p>Movilidad y preparación física pensada para la esgrima.</p>
+          </li>
+          <li class="item">
+            <span class="num">02</span>
+            <h3>Técnica</h3>
+            <p>Guardia, desplazamientos, distancia, ataques y paradas.</p>
+          </li>
+          <li class="item">
+            <span class="num">03</span>
+            <h3>Asaltos</h3>
+            <p>Combates con aparato eléctrico, según el nivel de cada quien.</p>
+          </li>
+        </ol>
+
+        <div class="grid" style="margin-top: 72px;">
+          <div class="item">
+            <h3>Jóvenes</h3>
+            <p>Coordinación, concentración y respeto por el rival.</p>
+          </div>
+          <div class="item">
+            <h3>Adultos</h3>
+            <p>Un deporte de estrategia para hacer ejercicio, despejar la cabeza y competir si lo deseas.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
   </main>
+
+  <footer>
+    <div class="wrap">
+      <a href="/">← Volver a Portento</a>
+      <span>Esgrima recreativa · Col. Del Valle, CDMX</span>
+    </div>
+  </footer>
+
 </body>
 </html>
