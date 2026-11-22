@@ -92,6 +92,9 @@
     .info dd { font-size: 18px; }
     .ph { color: #8a8a8a; }
 
+    .price { font-size: clamp(56px, 9vw, 96px); font-weight: 300; line-height: 1; letter-spacing: -0.03em; }
+    .price span { font-size: 18px; letter-spacing: 0; color: #555555; }
+    .price-detail { font-size: 19px; color: #555555; }
     .cta { text-align: center; display: flex; flex-direction: column; align-items: center; gap: 24px; }
     .cta h2 { margin: 0 auto; }
 
@@ -199,8 +202,10 @@
 
     <section id="contacto">
       <div class="wrap cta">
-        <p class="label">Contacto</p>
-        <h2>¿Quieres empezar? Escríbenos.</h2>
+        <p class="label">Mensualidad</p>
+        <p class="price">$900 <span>MXN al mes</span></p>
+        <p class="price-detail">Dos clases por semana, de una hora cada una.</p>
+        <h2 style="margin-top: 40px;">¿Quieres empezar? Escríbenos.</h2>
         <div class="actions">
           <a class="btn btn-dark" href="https://wa.me/525579709893" target="_blank" rel="noopener noreferrer">WhatsApp · 55 7970 9893</a>
           <a class="btn btn-light" href="https://www.instagram.com/angelogordillo/" target="_blank" rel="noopener noreferrer">Instagram · @angelogordillo</a>
