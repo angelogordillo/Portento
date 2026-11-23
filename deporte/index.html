@@ -95,6 +95,13 @@
     .price { font-size: clamp(56px, 9vw, 96px); font-weight: 300; line-height: 1; letter-spacing: -0.03em; }
     .price span { font-size: 18px; letter-spacing: 0; color: #555555; }
     .price-detail { font-size: 19px; color: #555555; }
+    .where { display: flex; flex-wrap: wrap; gap: 48px; align-items: stretch; }
+    .where-info { flex: 1 1 300px; display: flex; flex-direction: column; gap: 28px; }
+    .where-info dt { font-size: 13px; letter-spacing: 0.2em; text-transform: uppercase; color: #555555; margin-bottom: 6px; }
+    .where-info dd { font-size: 18px; }
+    .where-info dd.muted { font-size: 15px; color: #555555; margin-top: 6px; }
+    .map { flex: 999 1 420px; min-width: 0; min-height: 360px; position: relative; background: #f2f2f2; }
+    .map iframe { position: absolute; inset: 0; width: 100%; height: 100%; border: 0; filter: grayscale(1); }
     .cta { text-align: center; display: flex; flex-direction: column; align-items: center; gap: 24px; }
     .cta h2 { margin: 0 auto; }
 
@@ -206,6 +213,36 @@
         <h2>Angelo Gordillo</h2>
         <p class="lead" style="margin: -32px 0 32px; max-width: 54ch;">Fundador del Santiago Fencing Club en Chile y de la rama de esgrima de la Universidad Anáhuac México Norte. Medallista en florete, espada y sable.</p>
         <a class="btn btn-light" href="/deporte/trayectoria/">Ver trayectoria →</a>
+      </div>
+    </section>
+
+    <section id="ubicacion">
+      <div class="wrap">
+        <p class="label">Horario y ubicación</p>
+        <h2>Martes y jueves, 17:00 hrs.</h2>
+        <div class="where">
+          <dl class="where-info">
+            <div>
+              <dt>Horario</dt>
+              <dd>Martes y jueves<br />17:00 a 18:00 hrs</dd>
+            </div>
+            <div>
+              <dt>Dirección</dt>
+              <dd>Tlacoquemecatl 123, piso 2<br />Col. Del Valle, CDMX</dd>
+              <dd class="muted">En Coeducating, a un costado del Parque Tlacoquemecatl.</dd>
+            </div>
+            <div>
+              <dt>Estacionamiento</dt>
+              <dd class="muted">El lugar no tiene estacionamiento propio, pero la zona no tiene parquímetros. Hay un estacionamiento público junto a la paletería de Adolfo Prieto.</dd>
+            </div>
+            <div>
+              <a class="btn btn-light" href="https://www.google.com/maps/search/?api=1&amp;query=Tlacoquemecatl+123,+Del+Valle,+Ciudad+de+M%C3%A9xico" target="_blank" rel="noopener noreferrer">Abrir en Google Maps ↗</a>
+            </div>
+          </dl>
+          <div class="map">
+            <iframe src="https://www.google.com/maps?q=Tlacoquemecatl+123,+Del+Valle,+Ciudad+de+M%C3%A9xico&amp;z=16&amp;output=embed" title="Mapa: Tlacoquemecatl 123, Col. Del Valle, CDMX" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
+          </div>
+        </div>
       </div>
     </section>
 
