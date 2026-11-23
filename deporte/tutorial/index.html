@@ -1,0 +1,254 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Tutorial de iniciación a la espada | Portento</title>
+  <meta name="description" content="Principios básicos para iniciarse en la esgrima con espada y una rutina de acondicionamiento físico para piernas, brazos y resistencia." />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&display=swap" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      background: #ffffff;
+      color: #111111;
+      font-family: "Inter", system-ui, sans-serif;
+      font-size: 17px;
+      line-height: 1.6;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    .wrap { max-width: 1040px; margin: 0 auto; padding: 0 32px; }
+
+    .hero {
+      padding: 88px 0 80px;
+      display: flex; flex-direction: column; align-items: center; text-align: center; gap: 24px;
+    }
+    .hero svg { width: 120px; height: 120px; }
+    .eyebrow { font-size: 13px; letter-spacing: 0.28em; padding-left: 0.28em; text-transform: uppercase; color: #555555; }
+    h1 { font-size: clamp(40px, 6.5vw, 72px); font-weight: 300; line-height: 1.05; letter-spacing: -0.02em; max-width: 14ch; }
+    .lead { font-size: 19px; color: #555555; max-width: 52ch; }
+
+    .toc { display: flex; flex-wrap: wrap; justify-content: center; gap: 12px; padding-top: 8px; }
+    .toc a {
+      display: inline-flex; align-items: center; min-height: 44px; padding: 0 20px;
+      border: 1px solid #d6d6d6; border-radius: 999px; font-size: 15px; color: #111111; text-decoration: none;
+    }
+    .toc a:hover { border-color: #111111; }
+
+    section { border-top: 1px solid #e6e6e6; padding: 88px 0; }
+    .label { font-size: 13px; letter-spacing: 0.28em; text-transform: uppercase; color: #555555; margin-bottom: 16px; }
+    h2 { font-size: clamp(30px, 4vw, 44px); font-weight: 300; line-height: 1.15; letter-spacing: -0.01em; margin-bottom: 16px; }
+    .intro { color: #555555; max-width: 60ch; margin-bottom: 56px; }
+
+    .principles { list-style: none; display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 48px 56px; }
+    .principles .num { font-size: 13px; color: #8a8a8a; letter-spacing: 0.1em; display: block; margin-bottom: 12px; }
+    .principles h3 { font-size: 20px; font-weight: 500; margin-bottom: 8px; }
+    .principles p { color: #3a3a3a; }
+
+    .block { margin-top: 64px; }
+    .block:first-of-type { margin-top: 0; }
+    .block h3 { font-size: 22px; font-weight: 400; margin-bottom: 4px; }
+    .block .when { font-size: 14px; color: #555555; margin-bottom: 20px; }
+
+    .ex { list-style: none; border-top: 1px solid #e6e6e6; }
+    .ex li {
+      display: grid; grid-template-columns: minmax(0, 1fr) auto; gap: 8px 24px;
+      padding: 18px 0; border-bottom: 1px solid #e6e6e6;
+    }
+    .ex .name { font-weight: 500; }
+    .ex .dose { font-size: 15px; color: #111111; white-space: nowrap; text-align: right; }
+    .ex .how { grid-column: 1 / -1; color: #555555; font-size: 16px; }
+    @media (max-width: 560px) {
+      .ex li { grid-template-columns: 1fr; }
+      .ex .dose { text-align: left; }
+    }
+
+    .week { width: 100%; border-collapse: collapse; font-size: 16px; }
+    .week-box { overflow-x: auto; }
+    .week th, .week td { text-align: left; padding: 16px 16px 16px 0; border-bottom: 1px solid #e6e6e6; vertical-align: top; }
+    .week th { font-weight: 500; white-space: nowrap; }
+
+    .note {
+      margin-top: 56px; padding: 24px 28px; border: 1px solid #e6e6e6; border-radius: 4px;
+      color: #3a3a3a; font-size: 16px; max-width: 72ch;
+    }
+    .note strong { font-weight: 600; }
+
+    footer { border-top: 1px solid #e6e6e6; padding: 40px 0; }
+    footer .wrap { display: flex; flex-wrap: wrap; justify-content: space-between; gap: 16px; font-size: 14px; color: #555555; }
+    footer a { color: #555555; text-decoration: none; }
+  </style>
+</head>
+<body>
+
+  <main>
+    <div class="wrap hero">
+      <svg aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="0.8" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M21.5 2.5L9.2 14.8"/>
+        <path d="M6.8 12.4a4.2 4.2 0 0 0 4.8 4.8"/>
+        <path d="M8 16l-3.6 3.6"/>
+        <path d="M2.8 18l3.2 3.2"/>
+      </svg>
+      <p class="eyebrow">Tutorial · Iniciación</p>
+      <h1>Primeros pasos con la espada.</h1>
+      <p class="lead">Los principios básicos que verás en las primeras clases y una rutina sencilla para preparar piernas, brazos y resistencia en casa.</p>
+      <nav class="toc" aria-label="Contenido">
+        <a href="#principios">Principios básicos</a>
+        <a href="#rutina">Rutina de acondicionamiento</a>
+        <a href="#cardio">Caminata, escaleras y trote</a>
+        <a href="#semana">Semana tipo</a>
+      </nav>
+    </div>
+
+    <!-- PRINCIPIOS -->
+    <section id="principios" aria-labelledby="principios-title">
+      <div class="wrap">
+        <p class="label">01 · Principios básicos</p>
+        <h2 id="principios-title">Lo esencial antes del primer asalto.</h2>
+        <p class="intro">No hace falta memorizarlo todo: en clase lo practicamos paso a paso. Léelo para llegar con una idea de cómo se mueve un espadista.</p>
+        <ol class="principles">
+          <li>
+            <span class="num">01</span>
+            <h3>La guardia</h3>
+            <p>Pies en ángulo recto, separados más o menos el ancho de los hombros. Rodillas flexionadas sobre la punta de los pies y peso repartido entre ambas piernas. Tronco recto y de perfil, para ofrecer menos blanco.</p>
+          </li>
+          <li>
+            <span class="num">02</span>
+            <h3>El brazo armado</h3>
+            <p>Codo ligeramente flexionado, mano a la altura del pecho y punta dirigida al rival. Sostén la espada con los dedos, no con el puño apretado: el control viene de los dedos y la muñeca.</p>
+          </li>
+          <li>
+            <span class="num">03</span>
+            <h3>Marcha y retirada</h3>
+            <p>Para avanzar, mueve primero el pie de adelante y luego el de atrás. Para retroceder, al revés: primero el de atrás. Pasos cortos, sin cruzar ni juntar los pies, y siempre a la misma altura.</p>
+          </li>
+          <li>
+            <span class="num">04</span>
+            <h3>El fondo</h3>
+            <p>Es el ataque a fondo: primero extiendes el brazo, luego empujas con la pierna de atrás y el pie de adelante avanza apoyando el talón. La rodilla delantera queda sobre el tobillo, nunca más allá.</p>
+          </li>
+          <li>
+            <span class="num">05</span>
+            <h3>Primero la mano</h3>
+            <p>En espada gana quien toca primero. Por eso la punta sale antes que el cuerpo: el brazo se extiende y después llegan las piernas.</p>
+          </li>
+          <li>
+            <span class="num">06</span>
+            <h3>La distancia</h3>
+            <p>Es la clave de la espada. Aprende a mantenerte justo fuera del alcance del rival y a entrar sólo cuando puedes tocar. Paciencia antes que velocidad.</p>
+          </li>
+          <li>
+            <span class="num">07</span>
+            <h3>El blanco más cercano</h3>
+            <p>Como todo el cuerpo es válido, la mano y el antebrazo del rival son el blanco más cercano. Por lo mismo, cubre tu propia mano con la cazoleta.</p>
+          </li>
+          <li>
+            <span class="num">08</span>
+            <h3>Seguridad y respeto</h3>
+            <p>Nunca apuntes a nadie sin careta. Saluda al rival antes y después de cada asalto, y detente de inmediato cuando el maestro lo indique.</p>
+          </li>
+        </ol>
+      </div>
+    </section>
+
+    <!-- RUTINA -->
+    <section id="rutina" aria-labelledby="rutina-title">
+      <div class="wrap">
+        <p class="label">02 · Rutina de acondicionamiento</p>
+        <h2 id="rutina-title">Piernas y brazos, en 30 minutos.</h2>
+        <p class="intro">Hazla dos o tres veces por semana, en los días sin clase. No necesitas equipo: sólo una pared, una escalera o un escalón y dos botellas de agua.</p>
+
+        <div class="block">
+          <h3>Calentamiento</h3>
+          <p class="when">5 a 8 minutos</p>
+          <ul class="ex">
+            <li><span class="name">Caminata en el lugar</span><span class="dose">2 min</span><span class="how">Eleva rodillas poco a poco para subir la temperatura.</span></li>
+            <li><span class="name">Movilidad articular</span><span class="dose">3–5 min</span><span class="how">Círculos de tobillos, rodillas, cadera, hombros y muñecas, diez por lado.</span></li>
+          </ul>
+        </div>
+
+        <div class="block">
+          <h3>Piernas</h3>
+          <p class="when">Descansa 45 a 60 segundos entre series</p>
+          <ul class="ex">
+            <li><span class="name">Sentadilla</span><span class="dose">3 × 12</span><span class="how">Pies al ancho de la cadera, espalda recta y rodillas en la dirección de los pies.</span></li>
+            <li><span class="name">Zancadas alternas</span><span class="dose">3 × 10 por pierna</span><span class="how">Es el gesto del fondo. La rodilla delantera no pasa la punta del pie.</span></li>
+            <li><span class="name">Sentadilla isométrica en pared</span><span class="dose">3 × 30 s</span><span class="how">Espalda apoyada y rodillas a unos 90°. Fortalece la guardia.</span></li>
+            <li><span class="name">Elevación de talones</span><span class="dose">3 × 15</span><span class="how">Sube lento y baja controlando. Trabaja pantorrillas y tobillos.</span></li>
+            <li><span class="name">Desplazamientos en guardia</span><span class="dose">4 × 30 s</span><span class="how">Marcha y retirada en guardia, sin subir ni bajar la cabeza.</span></li>
+          </ul>
+        </div>
+
+        <div class="block">
+          <h3>Brazos y tronco</h3>
+          <p class="when">Descansa 45 a 60 segundos entre series</p>
+          <ul class="ex">
+            <li><span class="name">Lagartijas</span><span class="dose">3 × 8–12</span><span class="how">Para empezar, apoyado en la pared o con las rodillas en el suelo.</span></li>
+            <li><span class="name">Brazo armado sostenido</span><span class="dose">3 × 30 s por brazo</span><span class="how">Brazo extendido al frente a la altura del pecho, con una botella de agua en la mano.</span></li>
+            <li><span class="name">Muñecas con botella</span><span class="dose">2 × 15</span><span class="how">Antebrazo apoyado en el muslo: sube y baja la botella sólo con la muñeca.</span></li>
+            <li><span class="name">Plancha</span><span class="dose">3 × 20–30 s</span><span class="how">Antebrazos en el suelo y cuerpo en línea recta. Un tronco firme da estabilidad al fondo.</span></li>
+          </ul>
+        </div>
+
+        <div class="block">
+          <h3>Vuelta a la calma</h3>
+          <p class="when">5 minutos</p>
+          <ul class="ex">
+            <li><span class="name">Estiramientos</span><span class="dose">20–30 s cada uno</span><span class="how">Cuádriceps, parte posterior del muslo, pantorrillas, cadera, pecho y hombros. Sin rebotes.</span></li>
+          </ul>
+        </div>
+      </div>
+    </section>
+
+    <!-- CARDIO -->
+    <section id="cardio" aria-labelledby="cardio-title">
+      <div class="wrap">
+        <p class="label">03 · Resistencia</p>
+        <h2 id="cardio-title">Caminata, escaleras y, si puedes, trote suave.</h2>
+        <p class="intro">La esgrima pide piernas que aguanten muchos desplazamientos cortos. Elige la opción que mejor te funcione y súbele poco a poco.</p>
+        <ul class="ex">
+          <li><span class="name">Caminata a paso vivo</span><span class="dose">30 min · 3–5 días</span><span class="how">Un ritmo en el que puedas hablar pero no cantar. Es la base para todos.</span></li>
+          <li><span class="name">Escaleras</span><span class="dose">5–10 min · 2–3 días</span><span class="how">Sube a ritmo constante apoyando todo el pie y baja despacio, con la mano cerca del barandal. Empieza con 3 a 5 tramos y aumenta cada semana.</span></li>
+          <li><span class="name">Trote suave</span><span class="dose">15–20 min · 2–3 días</span><span class="how">Sólo si no tienes molestias en rodillas o tobillos. Empieza alternando 1 minuto de trote con 2 de caminata y alarga el trote poco a poco.</span></li>
+        </ul>
+      </div>
+    </section>
+
+    <!-- SEMANA -->
+    <section id="semana" aria-labelledby="semana-title">
+      <div class="wrap">
+        <p class="label">04 · Semana tipo</p>
+        <h2 id="semana-title">Cómo combinarlo con las clases.</h2>
+        <p class="intro">Un ejemplo con las dos clases semanales. Ajusta los días a tu agenda y deja al menos uno de descanso completo.</p>
+        <div class="week-box">
+          <table class="week">
+            <tbody>
+              <tr><th scope="row">Clase 1</th><td>Esgrima: técnica y práctica.</td></tr>
+              <tr><th scope="row">Día siguiente</th><td>Caminata o trote suave.</td></tr>
+              <tr><th scope="row">Día intermedio</th><td>Rutina de piernas y brazos.</td></tr>
+              <tr><th scope="row">Clase 2</th><td>Esgrima: técnica y práctica.</td></tr>
+              <tr><th scope="row">Día siguiente</th><td>Escaleras o caminata.</td></tr>
+              <tr><th scope="row">Fin de semana</th><td>Rutina de piernas y brazos, más un día de descanso.</td></tr>
+            </tbody>
+          </table>
+        </div>
+
+        <p class="note"><strong>Antes de empezar:</strong> si tienes alguna lesión, condición de salud o llevas tiempo sin hacer ejercicio, consulta a tu médico. Si un ejercicio te causa dolor, detente. Hidrátate y usa calzado deportivo cómodo.</p>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    <div class="wrap">
+      <a href="/deporte/">← Volver a Deporte</a>
+      <a href="https://wa.me/525579709893" target="_blank" rel="noopener noreferrer">Dudas por WhatsApp</a>
+    </div>
+  </footer>
+
+</body>
+</html>
