@@ -79,6 +79,11 @@
     }
     .note strong { font-weight: 600; }
 
+    .video { position: relative; width: 100%; max-width: 860px; aspect-ratio: 16 / 9; background: #f2f2f2; }
+    .video iframe { position: absolute; inset: 0; width: 100%; height: 100%; border: 0; }
+    .caption { margin-top: 16px; font-size: 14px; color: #555555; }
+    .caption a { color: #111111; }
+
     footer { border-top: 1px solid #e6e6e6; padding: 40px 0; }
     footer .wrap { display: flex; flex-wrap: wrap; justify-content: space-between; gap: 16px; font-size: 14px; color: #555555; }
     footer a { color: #555555; text-decoration: none; }
@@ -102,6 +107,7 @@
         <a href="#rutina">Rutina de acondicionamiento</a>
         <a href="#cardio">Caminata, escaleras y trote</a>
         <a href="#semana">Semana tipo</a>
+        <a href="#recursos">Recursos</a>
       </nav>
     </div>
 
@@ -239,6 +245,19 @@
         </div>
 
         <p class="note"><strong>Antes de empezar:</strong> si tienes alguna lesión, condición de salud o llevas tiempo sin hacer ejercicio, consulta a tu médico. Si un ejercicio te causa dolor, detente. Hidrátate y usa calzado deportivo cómodo.</p>
+      </div>
+    </section>
+    <!-- RECURSOS -->
+    <section id="recursos" aria-labelledby="recursos-title">
+      <div class="wrap">
+        <p class="label">05 · Recursos</p>
+        <h2 id="recursos-title">Para ver antes de la primera clase.</h2>
+        <p class="intro">Un video corto que muestra cómo se ataca y se defiende en esgrima.</p>
+        <div class="video">
+          <iframe src="https://www.youtube-nocookie.com/embed/XCiSLM04gE8?rel=0" title="Cómo atacar y defender en esgrima, de DeportesUncomo" loading="lazy"
+            allow="accelerometer; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
+        </div>
+        <p class="caption">Cómo atacar y defender en esgrima · DeportesUncomo · <a href="https://www.youtube.com/watch?v=XCiSLM04gE8" target="_blank" rel="noopener noreferrer">Ver en YouTube ↗</a></p>
       </div>
     </section>
   </main>
